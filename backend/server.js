@@ -2,32 +2,50 @@ require('dotenv').config()
 
 const express = require('express')
 const mongoose = require('mongoose')
-const taskRoutes = require('./routes/tasks')
-const userRoutes = require('./routes/user')
+const cors = require('cors')
+const cookieParser = require('cookie-parser')
+const passport = require('passport')
+const { apiLimiter } = require('./middleware/rateLimiter')
 
-// express app
+const connectDB = require('./config/db')
+
+const authRoutes = require('./routes/auth')
+const oauthRoutes = require('./routes/oauth')
+const adminRoutes = require('./routes/admin')
+const mfaRoutes = require('./routes/mfa')
+
 const app = express()
 
-// middleware
-app.use(express.json())
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  credentials: true,
+}))
+app.use(express.json({ limit: '10kb' }))
+app.use(cookieParser())
+app.use(passport.initialize())
 
 app.use((req, res, next) => {
-  console.log(req.path, req.method)
+  console.log(`${req.method} ${req.path}`)
   next()
 })
 
-// routes
-app.use('/api/tasks', taskRoutes)
-app.use('/api/user', userRoutes)
+app.use('/api/auth', apiLimiter, authRoutes)
+app.use('/api/auth/mfa', mfaRoutes)
+app.use('/api/oauth', oauthRoutes)
+app.use('/api/admin', adminRoutes)
 
-// connect to db
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    // listen for requests
-    app.listen(process.env.PORT, () => {
-      console.log('connected to db & listening on port', process.env.PORT)
-    })
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() })
+})
+
+connectDB()
+
+const PORT = process.env.PORT || 4000
+mongoose.connection.once('open', () => {
+  console.log('Connected to MongoDB')
+  app.listen(PORT, () => {
+    console.log(`AuthForge API running on port ${PORT}`)
   })
-  .catch((error) => {
-    console.log(error)
-  })
+})
+
+module.exports = app

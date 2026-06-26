@@ -10,7 +10,7 @@
 ![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-![Status](https://img.shields.io/badge/Status-In%20Development-yellow?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Complete-green?style=for-the-badge)
 
 A production-ready, plug-and-play authentication microservice built on the MERN stack. Not just login/logout — a complete, battle-hardened auth system you can drop into any project. Solves the problem that every new project starts auth from scratch with copy-paste code that quietly harbors security flaws.
 
@@ -181,8 +181,8 @@ docker-compose up   # starts MongoDB + Redis + API + React dev server
 
 ## Roadmap
 
-- [ ] **Phase 1** — Core auth: register, login, logout, JWT access + refresh tokens, bcrypt
-- [ ] **Phase 2** — Security hardening: HTTP-only cookies, rate limiting, CSRF, Redis token blacklist
-- [ ] **Phase 3** — Email flows: verification on register, password reset (Nodemailer + signed tokens)
-- [ ] **Phase 4** — Social login (Google + GitHub via Passport.js) + MFA (TOTP via otplib + QR)
-- [ ] **Phase 5** — Admin panel: user list, session revocation, audit log viewer, Docker Compose setup
+- [x] **Phase 1** — Core auth: register, login, logout, JWT access + refresh tokens, bcrypt
+- [x] **Phase 2** — Security hardening: HTTP-only cookies, rate limiting, CSRF, Redis token blacklist
+- [x] **Phase 3** — Email flows: verification on register, password reset (Nodemailer + signed tokens)
+- [x] **Phase 4** — Social login (Google + GitHub via Passport.js) + MFA (TOTP via otplib + QR)
+- [x] **Phase 5** — Admin panel: user list, session revocation, audit log viewer, Docker Compose setup

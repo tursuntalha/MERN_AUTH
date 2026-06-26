@@ -1,38 +1,29 @@
-import { Link } from "react-router-dom";
-import { useLogout } from "../hooks/useLogout";
-import { useAuthContext } from "../hooks/useAuthContext";
+import { Link } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuth'
 
 const Navbar = () => {
-  const { logout } = useLogout();
-  const { user } = useAuthContext();
-
-  const handleClick = () => {
-    logout();
-  };
+  const { user, isAuthenticated, logout } = useAuth()
 
   return (
-    <header>
-      <div className="container">
-        <Link to="/">
-          <h1>TASK </h1>
-        </Link>
-        <nav>
-          {user && (
-            <div>
-              <span>{user.email}</span>
-              <button onClick={handleClick}>Log out</button>
-            </div>
-          )}
-          {!user && (
-            <div>
-              <Link to="/login">Login</Link>
-              <Link to="/signup">Signup</Link>
-            </div>
-          )}
-        </nav>
+    <nav className="navbar">
+      <Link to="/"><h1>AuthForge</h1></Link>
+      <div className="nav-links">
+        {isAuthenticated ? (
+          <>
+            <span>{user?.email}</span>
+            {user?.role === 'admin' && <Link to="/admin">Admin</Link>}
+            <Link to="/mfa/setup">MFA</Link>
+            <button onClick={logout}>Logout</button>
+          </>
+        ) : (
+          <>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Register</Link>
+          </>
+        )}
       </div>
-    </header>
-  );
-};
+    </nav>
+  )
+}
 
-export default Navbar;
+export default Navbar
